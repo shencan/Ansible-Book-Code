@@ -1,0 +1,9 @@
+---
+ - hosts: all
+   gather_facts: True
+   tasks:
+     - name: debug loops
+       debug: msg="files ------> {{ item  }}"
+       with_first_found:
+         - "{{ ansible_distribution }}.yaml"
+         - "default.yaml"

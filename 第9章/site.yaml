@@ -1,0 +1,17 @@
+---
+ - name: Init base environment for all hosts
+   hosts: all      #所有主机引用base角色
+   roles:
+      - { role: base, tags: base }
+ - name: Install Mysql
+   hosts: mysql   #mysql主机组引用mysql角色
+   roles:
+      - { role: mysql, tags: mysql }
+ - name: Install Apache and PHP
+   hosts: apache  #apache主机组引用apache角色
+   roles:
+      - { role: apache, tags: apache }
+ - name: Install Haproxy
+   hosts: haproxy #haproxy主机组引用haproxy角色
+   roles:
+      - { role: haproxy, tags: haproxy }

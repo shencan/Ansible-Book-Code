@@ -1,0 +1,8 @@
+---
+ - hosts: all
+   gather_facts: False
+   vars:
+     contents: "{{ lookup('pipe', 'date  +%Y-%m-%d') }}"
+   tasks:
+     - name: debug lookups
+       debug: msg="The contents is {% for i in  contents.split("\n")  %} {{ i }} {% endfor %}" 

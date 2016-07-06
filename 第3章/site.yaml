@@ -1,0 +1,4 @@
+---
+ - hosts: 172.17.42.103
+   roles:
+     - { role: nginx, version: 1.0.15 }

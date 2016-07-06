@@ -1,0 +1,10 @@
+---
+ - hosts: all
+   gather_facts: False
+   tasks:
+     - name: debug loops
+       shell: cat /root/Ansible
+       register: host
+       until: host.stdout.startswith("Master")
+       retries: 5
+       delay: 5

@@ -1,0 +1,9 @@
+---
+ - hosts: all
+   gather_facts: False
+   tasks:
+     - name: debug loops
+       debug: msg="name  ------>  {{ item.key }}    vaule -------> {{ item.vaule }}"
+       with_items:
+         - {key: "one", vaule: "VAULE1"}
+         - {key: "two", vaule: "VAULE2"}

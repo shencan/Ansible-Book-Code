@@ -1,0 +1,8 @@
+---
+ - hosts: all
+   gather_facts: True
+   vars:
+     contents: "{{  lookup('template', './lookups.j2') }}"
+   tasks:
+     - name: debug lookups
+       debug: msg="The contents is {% for i in  contents.split("\n")  %} {{ i }} {% endfor %}"

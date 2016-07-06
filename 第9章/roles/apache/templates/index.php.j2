@@ -1,0 +1,10 @@
+<?php
+ echo  "Show Databases List:\n ";
+ {% for host in groups['mysql'] %}
+ $link = mysqli_connect('{{ hostvars[host].ansible_default_ipv4.address }}', '{{ hostvars[host].user }}', '{{ hostvars[host].password }}') or die(mysqli_connect_error($link));
+ {% endfor %}
+ $res = mysqli_query($link, "show databases;");
+ while ($row = mysqli_fetch_assoc($res)) {
+        echo $row['Database'] . "\n";
+  }
+?>

@@ -1,0 +1,36 @@
+---
+ - hosts: all
+   gather_facts: False
+   vars:
+      list: [1,2,3,4,5]
+      one: "1"
+      str: "string"
+   tasks:
+      - name: run commands
+        shell: df -h
+        register: info
+
+      - name: debug pprint filter
+        debug: msg="{{ info.stdout | pprint }}"
+
+      - name: debug  conditionals filter
+        debug: msg="The run commands status is changed"
+        when: info|changed
+
+      - name: debug int capitalize filter
+        debug: msg="The int value {{ one | int }} The lower value is {{ str | capitalize }}"
+
+      - name: debug default filter
+        debug: msg="The Variable value is {{ ansible | default('anible is not define') }}"
+
+      - name: debug  list max and min filter
+        debug: msg="The list max value is  {{ list | max }} The list min value is  {{ list | min }}"
+
+      - name: debug ramdom filter
+        debug: msg="The list ramdom value is {{ list | random }} and generate a random value is {{ 1000 | random(1, 10) }}"
+
+      - name: debug join filter
+        debug: msg="The join filter value is {{ list | join("+") }}"
+
+      - name: debug replace and regex_replace filter
+       debug: msg="The replace value is {{ str | replace('t','T') }}   The regex_replace vaule is {{ str | regex_replace('.*tr(.*)$', '\\1') }} "

@@ -1,0 +1,8 @@
+---
+ - hosts: all
+   gather_facts: False
+   vars:
+     contents: "{{ lookup('redis_kv', 'redis://localhost:6379,ansible') }}"
+   tasks:
+     - name: debug lookups
+       debug: msg="The contents is {% for i in  contents.split("\n")  %} {{ i }} {% endfor %}"

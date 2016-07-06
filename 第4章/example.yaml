@@ -1,0 +1,43 @@
+---
+- hosts: 192.168.1.117:192.168.1.118     #目标主机支持`Ad-Hoc`模式的所有patterns
+  remote_user: root                      #远程ssh认证用户
+  sudo: yes                              #设置`playbook sudo`操作
+  sudo_user: yadmin                      #设置`playbook sudo`用户
+  gather_facts: no                       #设置`facts`信息收集
+  accelerate: no                         #设置`accelerate`模式
+  accelerate_port: 5099                  #设置`accelerate`端口
+  max_fail_percentage: 30                #设置`playbook tasks`失败百分比
+  connection: local                      #设置远程连接方式
+  serial: 15                             #设置`playbook`并发数目
+  vars:                                  #设置`playbook`变量
+    nginx_port: 80
+  vars_files:                            #设置`playbook`变量引用文件
+    - "vars.yml"
+    - [ "one.yml", "two.yml" ]
+  vars_prompt:                           #设置通过交互模式输入变量
+    - name: "password vaes"
+      prompt: "Enter password"          #使用`prompt`模块加密输入变量
+      default: "secret"
+      private: yes
+      encrypt: "md5_crypt"
+      confirm: yes
+      salt: 1234
+      salt_size: 8
+  pre_tasks:                            #设置`playbook`运行之前的`tasks`
+    - name: pre_tasks
+      shell: hostname
+  roles:                                #设置引入`role`
+    - docker
+    - { role: docker, version: '1.5.0', when: "ansible_system == 'Linux'", tags :[docker,install ] }
+    - { role: docker, when: ansible_all_ipv4_addresses == '192.168.1.118' }
+  tasks:                                #设置引入`task`
+    - include: tasks.yaml
+    - include: tasks.yaml ansible_distribution='CentOS' ansible_distribution_version='6.6'
+    - { include: tasks.yaml, version: '1.1', package: [nginx,httpd]}
+    - include: tasks_192.168.1.117.yaml
+      when: ansible_all_ipv4_addresses == '192.168.1.117'
+  post_tasks:                           #设置`playbook`运行之后的`tasks`
+    - name: post_tasks
+      shell: hostname 
+  handlers:                             #设置`playbooks`的`handlers`
+    - include: handlers.yml

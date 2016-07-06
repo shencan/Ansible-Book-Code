@@ -1,0 +1,22 @@
+  ---
+   - hosts: all
+     tasks:
+       - name: Host 192.168.1.118 run this task
+         debug: msg="{{ ansible_default_ipv4.address  }}"
+         when: ansible_default_ipv4.address  == "192.168.1.118"
+
+       - name: memtotal < 500M and processor_cores == 2 run this task
+         debug: msg="{{ ansible_fqdn }}"
+         when: ansible_memtotal_mb < 500 and ansible_processor_cores == 2
+
+       - name: all host run this task
+         shell: hostname
+         register: info
+
+       - name: Hostname is  python Machie run this task
+         debug: msg="{{ ansible_fqdn }}"
+         when: info['stdout'] == "python"
+
+       - name: Hostname is startswith M run this task
+         debug: msg="{{ ansible_fqdn }}"
+         when:  info['stdout'].startswith('M')

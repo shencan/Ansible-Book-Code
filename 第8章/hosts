@@ -1,0 +1,7 @@
+[zabbix-server]
+192.168.1.100  hostname=server.shencan.net
+[zabbix-proxy]
+192.168.1.115  hostname=proxy.shencan.net  
+[zabbix-agent]
+192.168.1.111  hostname=agent.shencan.net   
+

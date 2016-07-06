@@ -1,0 +1,16 @@
+---
+  - name: Install Mysql-server
+    yum: name={{ item }} state=installed
+    with_items:
+        - mysql-server
+        - MySQL-python
+  - name: Copy my.cnf
+    template: src=my.cnf.j2 dest=/etc/my.cnf
+    notify:
+        - restart mysql
+  - name: Start Mysql
+    service: name=mysqld state=started enabled=yes
+  - name: Create  Database
+    mysql_db: name={{ database }} state=present
+  - name: Create Users
+    mysql_user: name={{ user }} password={{ password }} priv=*.*:ALL host='%' state=present

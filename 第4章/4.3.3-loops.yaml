@@ -1,0 +1,15 @@
+---
+ - hosts: all
+   gather_facts: False
+   vars:
+     user:
+        shencan:
+            name: shencan
+            shell: bash
+        ruifengyun:
+            name:  ruifengyun
+            shell: zsh
+   tasks:
+     - name: debug loops
+       debug: msg="name  ------>  {{ item.key }}    vaule -------> {{ item.value.name }}  shell ---------> {{ item.value.shell }}"
+       with_dict: user

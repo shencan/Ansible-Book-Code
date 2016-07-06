@@ -1,0 +1,10 @@
+---
+ - hosts: all
+   gather_facts: False
+   tasks:
+     - name: debug loops
+       debug: msg="name -----------> {{ item }}"
+       with_random_choice:
+         - "ansible1"
+         - "ansible2"
+         - "ansible3"

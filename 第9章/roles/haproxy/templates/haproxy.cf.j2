@@ -1,0 +1,40 @@
+global
+    log         127.0.0.1 local2
+    chroot      /var/lib/haproxy
+    pidfile     /var/run/haproxy.pid
+    maxconn     4000
+    user        root
+    group       root
+    daemon
+
+global
+    maxconn 100000
+    daemon
+    nbproc 1
+    log 127.0.0.1 local3 info
+
+defaults
+    option http-keep-alive
+    maxconn 100000
+    mode {{ mode }}
+    option  httplog
+    option  dontlognull
+    option  http-server-close
+    option redispatch
+    retries 3
+    timeout connect 5s
+    timeout client  20s
+    timeout server 10s
+
+frontend ansible
+     bind {{ ansible_default_ipv4.address }}:80
+     mode {{ mode }}
+     log global
+     default_backend apache
+
+backend apache
+    option httpchk HEAD / HTTP/1.0
+    balance   {{ balance }}
+    {% for host in groups['apache'] %}
+    server {{ hostvars[host].ansible_hostname }} {{ hostvars[host].ansible_default_ipv4.address }}:80  check inter 3000 rise 3 fall 2
+    {% endfor %}

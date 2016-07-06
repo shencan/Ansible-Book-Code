@@ -1,0 +1,13 @@
+---
+ - name: Install Apache and PHP
+   yum: name={{ item }} state=present
+   with_items:
+     - httpd
+     - php
+     - php-mysql
+     - libsemanage-python
+     - libselinux-python
+ - name: Copy index.php.j2
+   template: src=index.php.j2 dest=/var/www/html/index.php
+ - name: http service state
+   service: name=httpd state=started enabled=yes
